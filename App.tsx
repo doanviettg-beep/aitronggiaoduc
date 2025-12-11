@@ -1,10 +1,12 @@
+
 import React, { useState } from 'react';
 import Header from './components/Header';
 import ImageStudio from './components/ImageStudio';
 import ExamGenerator from './components/ExamGenerator';
 import OnlineTest from './components/OnlineTest';
+import DocConverter from './components/DocConverter';
 import { AppMode } from './types';
-import { Image, FileText, MonitorPlay, Home, Video, Sparkles } from 'lucide-react';
+import { Image, FileText, MonitorPlay, Home, Video, Sparkles, FileType } from 'lucide-react';
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<AppMode>(AppMode.HOME);
@@ -17,10 +19,12 @@ const App: React.FC = () => {
         return <ExamGenerator />;
       case AppMode.ONLINE_TEST:
         return <OnlineTest />;
+      case AppMode.DOC_CONVERTER:
+        return <DocConverter />;
       case AppMode.HOME:
       default:
         return (
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-10">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mt-10">
             <div 
               onClick={() => setMode(AppMode.IMAGE_STUDIO)}
               className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer border border-gray-100 group text-center"
@@ -29,7 +33,7 @@ const App: React.FC = () => {
                 <Sparkles size={32} />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">Studio Sáng Tạo AI</h3>
-              <p className="text-gray-500">Tạo ảnh Pro, Video Veo, Chỉnh sửa & Ghép ảnh nghề nghiệp thông minh.</p>
+              <p className="text-gray-500 text-sm">Tạo ảnh Pro, Video Veo, Chỉnh sửa & Ghép ảnh nghề nghiệp.</p>
             </div>
 
             <div 
@@ -40,7 +44,7 @@ const App: React.FC = () => {
                 <FileText size={32} />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">Tạo Đề & Ôn Tập</h3>
-              <p className="text-gray-500">Sinh đề thi tự động từ ma trận và xuất ra file Word.</p>
+              <p className="text-gray-500 text-sm">Sinh đề thi tự động từ ma trận và xuất ra file Word.</p>
             </div>
 
             <div 
@@ -51,7 +55,18 @@ const App: React.FC = () => {
                 <MonitorPlay size={32} />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">Thi Trực Tuyến</h3>
-              <p className="text-gray-500">Làm bài kiểm tra online có tính giờ và chấm điểm ngay.</p>
+              <p className="text-gray-500 text-sm">Làm bài kiểm tra online có tính giờ và chấm điểm ngay.</p>
+            </div>
+
+            <div 
+              onClick={() => setMode(AppMode.DOC_CONVERTER)}
+              className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer border border-gray-100 group text-center"
+            >
+              <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-sm">
+                <FileType size={32} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Chuyển sang Word</h3>
+              <p className="text-gray-500 text-sm">Chuyển đổi PDF/Ảnh sang Word giữ nguyên định dạng bảng.</p>
             </div>
           </div>
         );
@@ -90,6 +105,12 @@ const App: React.FC = () => {
               className={`px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors whitespace-nowrap ${mode === AppMode.ONLINE_TEST ? 'bg-purple-50 text-purple-700' : 'text-gray-500 hover:text-gray-900'}`}
             >
               <MonitorPlay size={18} /> Thi Online
+            </button>
+            <button 
+              onClick={() => setMode(AppMode.DOC_CONVERTER)}
+              className={`px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors whitespace-nowrap ${mode === AppMode.DOC_CONVERTER ? 'bg-orange-50 text-orange-700' : 'text-gray-500 hover:text-gray-900'}`}
+            >
+              <FileType size={18} /> Chuyển Word
             </button>
           </div>
         </div>

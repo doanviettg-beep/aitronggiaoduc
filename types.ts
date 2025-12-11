@@ -1,8 +1,10 @@
+
 export enum AppMode {
   HOME = 'HOME',
   IMAGE_STUDIO = 'IMAGE_STUDIO',
   EXAM_GENERATOR = 'EXAM_GENERATOR',
-  ONLINE_TEST = 'ONLINE_TEST'
+  ONLINE_TEST = 'ONLINE_TEST',
+  DOC_CONVERTER = 'DOC_CONVERTER'
 }
 
 export enum Grade {

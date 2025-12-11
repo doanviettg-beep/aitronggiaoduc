@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { ExamConfig, Subject } from "../types";
 
@@ -369,6 +370,50 @@ export const generateOnlineQuiz = async (config: ExamConfig): Promise<any> => {
     return JSON.parse(jsonText);
   } catch (error) {
     console.error("Lỗi tạo đề thi Online:", error);
+    throw error;
+  }
+};
+
+/**
+ * Convert Document/Image to HTML for Word Export
+ */
+export const convertDocumentToHtml = async (file: File): Promise<string> => {
+  try {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    const filePart = await fileToGenerativePart(file);
+
+    // Prompt engineered to preserve structure, tables, and formatting
+    const prompt = `
+      Bạn là một chuyên gia chuyển đổi tài liệu. Hãy chuyển đổi nội dung hình ảnh/PDF này thành mã HTML sạch để xuất sang Microsoft Word.
+      
+      YÊU CẦU QUAN TRỌNG:
+      1. GIỮ NGUYÊN ĐỊNH DẠNG:
+         - Nếu có BẢNG BIỂU (TABLE), bắt buộc phải sử dụng thẻ <table>, <tr>, <td> với border="1" style="border-collapse: collapse; width: 100%;".
+         - Giữ nguyên in đậm (<b>), in nghiêng (<i>), căn lề (text-align).
+         - Giữ nguyên cấu trúc tiêu đề (h1, h2, h3).
+      
+      2. KHÔNG DÙNG MARKDOWN:
+         - Chỉ trả về mã HTML thuần túy. KHÔNG bao bọc trong \`\`\`html \`\`\`.
+      
+      3. NỘI DUNG:
+         - Chuyển đổi chính xác toàn bộ văn bản có trong hình.
+         - Nếu là đề thi trắc nghiệm, hãy trình bày rõ ràng từng câu.
+    `;
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: {
+        parts: [filePart, { text: prompt }]
+      },
+    });
+
+    let html = response.text || "";
+    // Cleanup markdown code blocks if the model accidentally includes them
+    html = html.replace(/```html/g, '').replace(/```/g, '');
+    
+    return html;
+  } catch (error) {
+    console.error("Lỗi chuyển đổi tài liệu:", error);
     throw error;
   }
 };
