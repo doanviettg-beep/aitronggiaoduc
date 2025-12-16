@@ -159,49 +159,50 @@ const ImageStudio: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center gap-2">
-          <Sparkles className="text-yellow-500" /> Studio Sáng Tạo AI
-        </h2>
-        <p className="text-gray-500 mt-2">Nghề nghiệp • Ghép ảnh • Chỉnh sửa • Xóa nền • Tạo mới • Video</p>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex flex-wrap justify-center gap-2 mb-6">
-        {[
-          { id: 'career', label: 'Nghề Nghiệp', icon: <Briefcase size={18} /> },
-          { id: 'merge', label: 'Ghép Ảnh', icon: <Users size={18} /> },
-          { id: 'edit', label: 'Chỉnh Sửa', icon: <Wand2 size={18} /> },
-          { id: 'removeBg', label: 'Xóa Nền', icon: <Eraser size={18} /> },
-          { id: 'genPro', label: 'Tạo Ảnh Pro', icon: <Crown size={18} /> },
-          { id: 'veo', label: 'Tạo Video', icon: <Video size={18} /> },
-        ].map((tab) => (
-           <button
-             key={tab.id}
-             onClick={() => resetState(tab.id)}
-             className={`px-4 py-3 rounded-xl font-medium transition-all flex items-center gap-2 text-sm ${
-               activeTab === tab.id 
-                 ? 'bg-blue-600 text-white shadow-lg transform scale-105' 
-                 : 'bg-white text-gray-600 hover:bg-gray-50'
-             }`}
-           >
-             {tab.icon} {tab.label}
-           </button>
-        ))}
+    <div className="max-w-6xl mx-auto space-y-6">
+      <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+             <Sparkles className="text-blue-500" /> Studio Sáng Tạo AI
+           </h2>
+           <p className="text-gray-500 text-sm mt-1">Công cụ xử lý hình ảnh và video đa năng</p>
+        </div>
+        
+        {/* Horizontal Scrollable Tabs */}
+        <div className="flex overflow-x-auto gap-2 pb-2 md:pb-0 no-scrollbar">
+          {[
+            { id: 'career', label: 'Nghề Nghiệp', icon: <Briefcase size={16} /> },
+            { id: 'merge', label: 'Ghép Ảnh', icon: <Users size={16} /> },
+            { id: 'edit', label: 'Chỉnh Sửa', icon: <Wand2 size={16} /> },
+            { id: 'removeBg', label: 'Xóa Nền', icon: <Eraser size={16} /> },
+            { id: 'genPro', label: 'Tạo Ảnh Pro', icon: <Crown size={16} /> },
+            { id: 'veo', label: 'Tạo Video', icon: <Video size={16} /> },
+          ].map((tab) => (
+             <button
+               key={tab.id}
+               onClick={() => resetState(tab.id)}
+               className={`px-3 py-2 rounded-lg font-medium transition-all flex items-center gap-2 text-sm whitespace-nowrap border ${
+                 activeTab === tab.id 
+                   ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
+                   : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+               }`}
+             >
+               {tab.icon} {tab.label}
+             </button>
+          ))}
+        </div>
       </div>
 
       {/* Controls Area */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 min-h-[500px]">
-        <div className="grid md:grid-cols-2 gap-8 items-start h-full">
+      <div className="grid lg:grid-cols-12 gap-6 h-[calc(100vh-250px)] min-h-[500px]">
           {/* LEFT: INPUTS */}
-          <div className="space-y-6">
+          <div className="lg:col-span-4 flex flex-col gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 overflow-y-auto">
             
             {/* --- CAREER MODE --- */}
             {activeTab === 'career' && (
-              <>
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Ảnh chân dung</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">1. Chọn ảnh chân dung</label>
                   <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:bg-gray-50 transition cursor-pointer relative h-48 flex flex-col justify-center items-center">
                     <input 
                       type="file" 
@@ -220,7 +221,7 @@ const ImageStudio: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Chọn nghề nghiệp</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">2. Chọn nghề nghiệp</label>
                   <select 
                     value={selectedCareer}
                     onChange={(e) => setSelectedCareer(e.target.value)}
@@ -232,17 +233,17 @@ const ImageStudio: React.FC = () => {
                 <button
                   disabled={!careerImage || isGenerating}
                   onClick={handleCareerGenerate}
-                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white font-bold py-3 rounded-lg flex justify-center items-center gap-2"
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white font-bold py-3 rounded-lg flex justify-center items-center gap-2 mt-auto"
                 >
                   {isGenerating ? <Loader2 className="animate-spin" /> : <Briefcase />} 
                   {isGenerating ? 'Đang xử lý...' : 'Tạo Ảnh'}
                 </button>
-              </>
+              </div>
             )}
 
             {/* --- MERGE MODE --- */}
             {activeTab === 'merge' && (
-              <>
+              <div className="space-y-4">
                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">1. Ảnh người</label>
                     <input type="file" accept="image/*" onChange={(e) => setFaceImage(e.target.files?.[0] || null)} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
@@ -259,14 +260,14 @@ const ImageStudio: React.FC = () => {
                    {isGenerating ? <Loader2 className="animate-spin" /> : <Users />} 
                    {isGenerating ? 'Đang xử lý...' : 'Ghép Ảnh'}
                  </button>
-              </>
+              </div>
             )}
 
             {/* --- EDIT MODE --- */}
             {activeTab === 'edit' && (
-              <>
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Ảnh cần sửa</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">1. Ảnh cần sửa</label>
                   <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-gray-50 transition cursor-pointer relative h-48 flex flex-col justify-center items-center">
                     <input 
                       type="file" 
@@ -282,8 +283,7 @@ const ImageStudio: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Yêu cầu chỉnh sửa</label>
-                  {/* Quick Prompts */}
+                  <label className="block text-sm font-medium text-gray-700 mb-2">2. Yêu cầu chỉnh sửa</label>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {QUICK_EDITS.map(prompt => (
                       <button 
@@ -310,12 +310,12 @@ const ImageStudio: React.FC = () => {
                   {isGenerating ? <Loader2 className="animate-spin" /> : <Wand2 />} 
                   {isGenerating ? 'Đang xử lý...' : 'Chỉnh Sửa'}
                 </button>
-              </>
+              </div>
             )}
 
              {/* --- REMOVE BG MODE --- */}
              {activeTab === 'removeBg' && (
-              <>
+              <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Ảnh cần xóa nền</label>
                   <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-gray-50 transition cursor-pointer relative h-64 flex flex-col justify-center items-center">
@@ -345,12 +345,12 @@ const ImageStudio: React.FC = () => {
                   {isGenerating ? <Loader2 className="animate-spin" /> : <Eraser />} 
                   {isGenerating ? 'Đang xử lý...' : 'Xóa Nền'}
                 </button>
-              </>
+              </div>
             )}
 
             {/* --- GEN PRO MODE --- */}
             {activeTab === 'genPro' && (
-              <>
+              <div className="space-y-4">
                 <div className="bg-amber-50 p-3 rounded-lg text-amber-800 text-xs mb-2 flex items-center gap-2 border border-amber-100">
                    <Crown size={14} className="flex-shrink-0" /> 
                    <span>Sử dụng <b>Gemini 3 Pro</b> (Yêu cầu API Key trả phí). Hỗ trợ độ phân giải cao 4K.</span>
@@ -383,15 +383,15 @@ const ImageStudio: React.FC = () => {
                   {isGenerating ? <Loader2 className="animate-spin" /> : <Crown />} 
                   {isGenerating ? 'Đang xử lý...' : 'Tạo Ảnh Pro'}
                 </button>
-              </>
+              </div>
             )}
 
             {/* --- VEO MODE --- */}
             {activeTab === 'veo' && (
-              <>
+              <div className="space-y-4">
                 <div className="bg-indigo-50 p-3 rounded-lg text-indigo-800 text-xs mb-2 flex items-center gap-2 border border-indigo-100">
                    <Video size={14} className="flex-shrink-0" /> 
-                   <span>Sử dụng <b>Veo Video Generation</b> (Yêu cầu API Key trả phí). Quá trình có thể mất vài phút.</span>
+                   <span>Sử dụng <b>Veo Video Generation</b> (Yêu cầu API Key trả phí).</span>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Ảnh gốc</label>
@@ -440,7 +440,7 @@ const ImageStudio: React.FC = () => {
                   {isGenerating ? <Loader2 className="animate-spin" /> : <Clapperboard />} 
                   {isGenerating ? 'Đang tạo Video...' : 'Tạo Video'}
                 </button>
-              </>
+              </div>
             )}
 
             {error && (
@@ -457,53 +457,59 @@ const ImageStudio: React.FC = () => {
           </div>
           
           {/* RIGHT: RESULT DISPLAY */}
-          <div className="bg-gray-50 rounded-xl p-4 h-full flex items-center justify-center border border-gray-200 min-h-[400px]">
+          <div className="lg:col-span-8 bg-gray-900 rounded-2xl p-4 h-full flex items-center justify-center border border-gray-800 shadow-inner relative overflow-hidden">
+             {/* Background Grid Pattern */}
+             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+             
              {isGenerating ? (
-               <div className="text-center text-gray-500">
+               <div className="text-center text-gray-300 relative z-10">
                  <Loader2 size={48} className="animate-spin mx-auto mb-4 text-blue-500" />
-                 <p className="font-medium animate-pulse text-lg">Đang thực hiện phép màu AI...</p>
+                 <p className="font-medium animate-pulse text-lg text-white">Đang thực hiện phép màu AI...</p>
                  <p className="text-xs mt-2 text-gray-400">Vui lòng đợi trong giây lát</p>
                  {activeTab === 'veo' && (
-                    <div className="mt-4 p-3 bg-blue-50 text-blue-700 text-xs rounded border border-blue-100 max-w-xs mx-auto">
-                       Video generation với Veo model có thể mất từ 1-2 phút. Hãy kiên nhẫn nhé!
+                    <div className="mt-6 p-4 bg-indigo-900/50 text-indigo-200 text-sm rounded-lg border border-indigo-700/50 max-w-sm mx-auto backdrop-blur-sm">
+                       <p className="font-bold mb-2 flex items-center justify-center gap-2"><Video size={14}/> Veo Video Generation</p>
+                       <p className="mb-2">Quá trình này có thể mất từ 1-2 phút.</p>
+                       <p className="text-xs opacity-70">Chúng tôi đang render từng khung hình cho bạn. Đừng đóng tab nhé!</p>
                     </div>
                  )}
                </div>
              ) : (
                <>
                  {resultImage && (
-                   <div className="relative group w-full h-full flex items-center justify-center">
-                      <img src={resultImage} alt="AI Result" className="max-w-full max-h-[500px] object-contain rounded-lg shadow-md" />
-                      <a 
-                        href={resultImage} 
-                        download={`ai-generated-${Date.now()}.png`}
-                        className="absolute bottom-4 right-4 bg-white text-gray-800 px-4 py-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity font-medium text-sm hover:bg-blue-50 flex items-center gap-2"
-                      >
-                        <Upload className="rotate-180" size={16} /> Tải về
-                      </a>
+                   <div className="relative group w-full h-full flex items-center justify-center z-10 p-4">
+                      <img src={resultImage} alt="AI Result" className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" />
+                      <div className="absolute bottom-6 flex gap-2">
+                        <a 
+                          href={resultImage} 
+                          download={`ai-generated-${Date.now()}.png`}
+                          className="bg-white text-gray-900 px-6 py-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0 font-bold text-sm hover:bg-blue-50 flex items-center gap-2"
+                        >
+                          <Upload className="rotate-180" size={16} /> Tải ảnh về
+                        </a>
+                      </div>
                    </div>
                  )}
 
                  {resultVideo && (
-                   <div className="w-full flex flex-col items-center">
-                      <video controls src={resultVideo} className="w-full rounded-lg shadow-md max-h-[500px] bg-black" autoPlay loop />
-                      <a href={resultVideo} download="veo-video.mp4" className="mt-4 flex items-center gap-2 bg-indigo-600 text-white px-6 py-2 rounded-full font-bold hover:bg-indigo-700 transition">
+                   <div className="w-full h-full flex flex-col items-center justify-center z-10 p-4">
+                      <video controls src={resultVideo} className="w-full h-full rounded-lg shadow-2xl bg-black object-contain" autoPlay loop />
+                      <a href={resultVideo} download="veo-video.mp4" className="mt-4 flex items-center gap-2 bg-indigo-600 text-white px-6 py-2 rounded-full font-bold hover:bg-indigo-700 transition shadow-lg border border-indigo-500">
                          <Upload className="rotate-180" size={18} /> Tải video về máy
                       </a>
                    </div>
                  )}
 
                  {!resultImage && !resultVideo && (
-                   <div className="text-gray-400 text-center">
-                     {activeTab === 'veo' ? <Video size={64} className="mx-auto mb-3 opacity-20" /> : <ImageIcon size={64} className="mx-auto mb-3 opacity-20" />}
-                     <p className="text-lg font-medium opacity-50">Kết quả sẽ hiển thị ở đây</p>
-                     <p className="text-sm opacity-40 mt-1">Chọn tính năng bên trái để bắt đầu</p>
+                   <div className="text-gray-600 text-center relative z-10">
+                     {activeTab === 'veo' ? <Video size={80} className="mx-auto mb-4 opacity-20" /> : <ImageIcon size={80} className="mx-auto mb-4 opacity-20" />}
+                     <p className="text-xl font-medium opacity-50">Khu vực hiển thị kết quả</p>
+                     <p className="text-sm opacity-30 mt-2">Chọn tính năng bên trái và nhấn Tạo</p>
                    </div>
                  )}
                </>
              )}
           </div>
-        </div>
       </div>
     </div>
   );
